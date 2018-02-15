@@ -50,10 +50,10 @@ def head(file_name):
 def tail(file_name):
     with open(file_name) as f:
         lines=f.readlines()
-        l=str(lines)
-        print(l)
+        print(lines[-10:])
 
-print(tail("random_dna.txt"))
+tail("random_dna.txt")
+
 def print_even(file_name):
     with open(file_name) as f:
         count=0
