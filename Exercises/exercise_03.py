@@ -1,22 +1,43 @@
 import os
-import sys
+
 def fasta_folder_to_dict(folder_path):
-    fasta={}
+    """
+    Constructs a dictionary of all of the FASTA formatted entries from a folder containing FASTA files.
+    :param folder_path: string
+    :return: dictionary
+    """
+    dict = {}
     for file in os.listdir(folder_path):
         if not file.endswith('.fasta'):
             continue
-        with open(folder_path + '/'+ file) as file_one:
-            for line in file_one:
-                line = line.strip()
-                if not line:
-                    continue
-                if line.startswith(">"):
-                    active_sequence_name = line[1:]
-                    if active_sequence_name not in fasta:
-                        fasta[active_sequence_name] = []
-                    continue
-                sequence = line
-                fasta[active_sequence_name].append(line)
-    return fasta
+        with open(folder_path + '/' + file, 'r') as infile:
+            infile = infile.read()
+            seqs = infile.split('>')
+            seqs = seqs[1:]
+            d = ''
+            for seq in seqs:
+                try:
+                    x = seq.split('\n', 1)
+                    header = x[0]
+                    sequence = x[1].replace('\n', '')
 
-print(fasta_folder_to_dict("../CS696"))
+                    if d != header:
+                        dict[header] = sequence
+                        d = header
+                    else:
+                        del dict[header]
+                    if sequence == '':
+                        del dict[header]
+
+                    for i in range(len(sequence)):
+                        if sequence[i] != 'G' and sequence[i] != 'A' and sequence[i] != 'T' and sequence[i] != 'C':
+                            del dict[header]
+                            break
+
+                except:
+                    print('Please Check Fasta Files')
+
+    for fasta_keys, fasta_values in dict.items():
+        print('Key: {}\tValue:{}'.format(fasta_keys, fasta_values))
+
+    return dict
