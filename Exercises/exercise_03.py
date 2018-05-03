@@ -1,11 +1,6 @@
 import os
 
 def fasta_folder_to_dict(folder_path):
-    """
-    Constructs a dictionary of all of the FASTA formatted entries from a folder containing FASTA files.
-    :param folder_path: string
-    :return: dictionary
-    """
     dict = {}
     for file in os.listdir(folder_path):
         if not file.endswith('.fasta'):
@@ -39,5 +34,4 @@ def fasta_folder_to_dict(folder_path):
 
     for fasta_keys, fasta_values in dict.items():
         print('Key: {}\tValue:{}'.format(fasta_keys, fasta_values))
-
     return dict
